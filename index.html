@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>New Star — Mini Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{
+      --bg1:#04060b; --bg2:#071022; --card:#0f1724;
+      --accent:#ffd25a; --accent-dark:#ffb300; --muted:#9aa6c0;
+      --glass: rgba(255,255,255,0.03);
+      --success:#22c55e;
+      --danger:#ff6b6b;
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#eef2f7}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:100%;max-width:560px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:16px;padding:20px;box-shadow:0 12px 50px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+    .logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-weight:800;color:#071026;font-size:24px;box-shadow:0 6px 18px rgba(255,178,0,0.12)}
+    .title{font-weight:800;font-size:20px}
+    .subtitle{color:var(--muted);font-size:13px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
+    .muted{color:var(--muted);font-size:13px}
+    .star-wrap{display:flex;align-items:center;justify-content:center;margin:8px 0 12px}
+    .star-btn{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:72px;background:radial-gradient(circle at 30% 30%, #fff3c7, var(--accent));box-shadow:0 14px 44px rgba(255,178,0,0.12);border:none;cursor:pointer;transition:transform .12s}
+    .stats{display:flex;gap:10px;justify-content:space-between;margin-bottom:12px}
+    .stat{flex:1;background:var(--glass);padding:12px;border-radius:12px;text-align:center}
+    .stat .num{font-weight:800;font-size:18px}
+    .footer{display:flex;justify-content:center;margin-top:10px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="logo">⭐</div>
+        <div style="flex:1">
+          <div class="title">New Star</div>
+          <div class="subtitle">Tangalarni yig‘ — darajani oshir!</div>
+        </div>
+      </header>
+
+      <div class="topbar">
+        <div id="userInfo" class="muted">👤 Foydalanuvchi yuklanmoqda...</div>
+      </div>
+
+      <div class="star-wrap">
+        <button id="starBtn" class="star-btn" aria-label="Tap to collect">⭐</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="num" id="coins">0</div>
+          <div class="muted small">Tangalar</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="level">1</div>
+          <div class="muted small">Daraja</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        © 2025 New Star Game
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const starBtn = document.getElementById("starBtn");
+    const coinsEl = document.getElementById("coins");
+    const levelEl = document.getElementById("level");
+    const userInfo = document.getElementById("userInfo");
+
+    let coins = 0;
+    let level = 1;
+
+    // 🔹 Telegram foydalanuvchi ma'lumotlarini olish
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+      userInfo.textContent = `👤 Siz: ${user.first_name || ''} ${user.last_name || ''} (ID: ${user.id})`;
+    } else {
+      userInfo.textContent = "👤 Telegram foydalanuvchi aniqlanmadi.";
+    }
+
+    starBtn.onclick = () => {
+      coins++;
+      if (coins % 10 === 0) level++;
+      coinsEl.textContent = coins;
+      levelEl.textContent = level;
+    };
+  </script>
+</body>
+</html>
